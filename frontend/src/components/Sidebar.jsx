@@ -29,7 +29,7 @@ function Sidebar({ onClose }) {
   const handleLogout = async () => {
     try {
       const { data } = await axios.get(
-        "http://localhost:5000/api/v1/user/logout",
+        `${import.meta.env.VITE_API_URL}/user/logout`,
         { withCredentials: true }
       );
       localStorage.removeItem("user");

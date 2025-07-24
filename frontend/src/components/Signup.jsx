@@ -29,7 +29,7 @@ function Signup() {
     setError("");
     try {
       const { data } = await axios.post(
-        "http://localhost:5000/api/v1/user/signup",
+        `${import.meta.env.VITE_API_URL}/user/signup`,
         {
           firstName: formData.firstName,
           lastName: formData.lastName,

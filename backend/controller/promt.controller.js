@@ -1,9 +1,11 @@
 import OpenAI from "openai";
 import { Promt } from "../model/promt.model.js";
 
+console.log("🧪 API KEY CHECK:", process.env.OPENROUTER_API_KEY);
+
 const openai = new OpenAI({
   baseURL: "https://openrouter.ai/api/v1",
-  apiKey: process.env.OPENROUTER_API_KEY,
+  apiKey: "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",
 });
 export const sendPromt = async (req, res) => {
   const { content } = req.body;

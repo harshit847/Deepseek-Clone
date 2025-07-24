@@ -10,7 +10,6 @@ import { tomorrow as codeTheme } from "react-syntax-highlighter/dist/esm/styles/
 function Promt() {
   const [inputValue, setInputValue] = useState("");
   const [typeMessage, setTypeMessage] = useState("");
-
   const [promt, setPromt] = useState([]);
   const [loading, setLoading] = useState(false);
   const promtEndRef = useRef();
@@ -48,7 +47,7 @@ function Promt() {
       const token = localStorage.getItem("token");
 
       const { data } = await axios.post(
-        "http://localhost:4002/api/v1/deepseekai/promt",
+        "http://localhost:5000/api/v1/deepseekai/promt",
         { content: trimmed },
         {
           headers: {
@@ -84,32 +83,31 @@ function Promt() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-between flex-1 w-full px-4 pb-4 md:pb-8">
-      {/* ➤ Greeting Section */}
-      <div className="mt-8 md:mt-16 text-center">
+    <div className="flex flex-col h-full w-full max-w-6xl mx-auto px-4 md:px-6">
+      {/* 🔒 Sticky Greeting Header */}
+      <div className="sticky top-0 z-10 bg-[#1e1e1e] border-b border-gray-700 pt-6 pb-4">
         <div className="flex items-center justify-center gap-2">
           <img src={logo} alt="DeepSeek Logo" className="h-6 md:h-8" />
-          <h1 className="text-2xl md:text-3xl font-semibold text-white mb-2">
+          <h1 className="text-2xl md:text-3xl font-semibold text-white">
             Hi, I'm DeepSeek.
           </h1>
         </div>
-        <p className="text-gray-400 text-base md:text-sm mt-2">
+        <p className="text-gray-400 text-base md:text-sm text-center mt-2">
           💬 How can I help you today?
         </p>
       </div>
 
-      {/* ➤ Scrollable Chat Box */}
-      <div className="w-full max-w-4xl flex-1 overflow-y-auto mt-6 mb-4 space-y-4 max-h-[60vh] px-1">
+      {/* 🗨️ Scrollable Chat */}
+      <div className="flex-1 overflow-y-auto py-4 space-y-4">
         {promt.map((msg, index) => (
           <div
             key={index}
-            className={`w-full flex ${
+            className={`flex ${
               msg.role === "user" ? "justify-end" : "justify-start"
             }`}
           >
             {msg.role === "assistant" ? (
-              // 🧠 Full-width assistant response
-              <div className="w-full bg-[#232323] text-white rounded-xl px-4 py-3 text-sm whitespace-pre-wrap">
+              <div className="w-full bg-[#232323] text-white rounded-xl px-4 py-3 text-sm">
                 <ReactMarkdown
                   remarkPlugins={[remarkGfm]}
                   components={{
@@ -140,29 +138,27 @@ function Promt() {
                 </ReactMarkdown>
               </div>
             ) : (
-              // 👤 User message - 30% width at top-right
-              <div className="w-[30%] bg-blue-600 text-white rounded-xl px-4 py-3 text-sm whitespace-pre-wrap self-start">
+              <div className="bg-blue-600 text-white rounded-xl px-4 py-3 text-sm w-fit max-w-[70%]">
                 {msg.content}
               </div>
             )}
           </div>
         ))}
 
-        {/* Show user's prompt while loading */}
+        {/* User typing */}
         {loading && typeMessage && (
-          <div
-            className="whitespace-pre-wrap px-4 py-3 rounded-2xl text-sm break-words
-           bg-blue-600 text-white self-end ml-auto max-w-[40%]"
-          >
-            {typeMessage}
+          <div className="flex justify-end">
+            <div className="bg-blue-600 text-white rounded-xl px-4 py-3 text-sm max-w-[70%]">
+              {typeMessage}
+            </div>
           </div>
         )}
 
-        {/* 🤖 Typing Indicator */}
+        {/* AI Typing... */}
         {loading && (
-          <div className="flex justify-start w-full">
+          <div className="flex justify-start">
             <div className="bg-[#2f2f2f] text-white px-4 py-3 rounded-xl text-sm animate-pulse">
-              🤖Loading...
+              🤖 Loading...
             </div>
           </div>
         )}
@@ -170,43 +166,41 @@ function Promt() {
         <div ref={promtEndRef} />
       </div>
 
-      {/* ➤ Input Box */}
-      <div className="w-full max-w-4xl relative mt-auto">
-        <div className="bg-[#2f2f2f] rounded-[2rem] px-4 md:px-6 py-6 md:py-8 shadow-md">
-          <input
-            type="text"
-            placeholder="💬 Message DeepSeek"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            onKeyDown={handleKeyDown}
-            className="bg-transparent w-full text-white placeholder-gray-400 text-base md:text-lg outline-none"
-          />
+      {/* 📝 Input Box */}
+      <div className="bg-[#2f2f2f] rounded-2xl px-4 md:px-6 py-6 md:py-8 mt-2 mb-6 shadow-md">
+        <input
+          type="text"
+          placeholder="💬 Message DeepSeek"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          onKeyDown={handleKeyDown}
+          className="bg-transparent w-full text-white placeholder-gray-400 text-base md:text-lg outline-none"
+        />
 
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between mt-4 gap-4">
-            {/* 🛠️ Functional Buttons */}
-            <div className="flex gap-2 flex-wrap">
-              <button className="flex items-center gap-2 border border-gray-500 text-white text-sm md:text-base px-3 py-1.5 rounded-full hover:bg-gray-600 transition">
-                <Bot className="w-4 h-4" />
-                DeepThink (R1)
-              </button>
-              <button className="flex items-center gap-2 border border-gray-500 text-white text-sm md:text-base px-3 py-1.5 rounded-full hover:bg-gray-600 transition">
-                <Globe className="w-4 h-4" />
-                Search
-              </button>
-            </div>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between mt-4 gap-4">
+          {/* Buttons */}
+          <div className="flex gap-2 flex-wrap">
+            <button className="flex items-center gap-2 border border-gray-500 text-white text-sm md:text-base px-3 py-1.5 rounded-full hover:bg-gray-600 transition">
+              <Bot className="w-4 h-4" />
+              DeepThink (R1)
+            </button>
+            <button className="flex items-center gap-2 border border-gray-500 text-white text-sm md:text-base px-3 py-1.5 rounded-full hover:bg-gray-600 transition">
+              <Globe className="w-4 h-4" />
+              Search
+            </button>
+          </div>
 
-            {/* ➤ Send Button */}
-            <div className="flex items-center gap-2 ml-auto">
-              <button className="text-gray-400 hover:text-white transition">
-                <Paperclip className="w-5 h-5" />
-              </button>
-              <button
-                onClick={handleSend}
-                className="bg-gray-500 hover:bg-blue-600 p-2 rounded-full text-white transition"
-              >
-                <ArrowUp className="w-4 h-4" />
-              </button>
-            </div>
+          {/* Send */}
+          <div className="flex items-center gap-2 ml-auto">
+            <button className="text-gray-400 hover:text-white transition">
+              <Paperclip className="w-5 h-5" />
+            </button>
+            <button
+              onClick={handleSend}
+              className="bg-gray-500 hover:bg-blue-600 p-2 rounded-full text-white transition"
+            >
+              <ArrowUp className="w-4 h-4" />
+            </button>
           </div>
         </div>
       </div>

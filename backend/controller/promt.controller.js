@@ -2,7 +2,7 @@ import OpenAI from "openai";
 import { Promt } from "../model/promt.model.js";
 
 const openai = new OpenAI({
-  baseURL: "https://api.deepseek.com",
+  baseURL: "https://openrouter.ai/api/v1",
   apiKey: process.env.OPENAI_API_KEY,
 });
 export const sendPromt = async (req, res) => {
@@ -12,6 +12,8 @@ export const sendPromt = async (req, res) => {
   if (!content || content.trim() === "") {
     return res.status(400).json({ errors: "Promt content is required" });
   }
+  console.log("userId in sendPromt:", userId);
+
   try {
     // save user promt
     const userPromt = await Promt.create({
@@ -23,7 +25,7 @@ export const sendPromt = async (req, res) => {
     // send to openAI
     const completion = await openai.chat.completions.create({
       messages: [{ role: "user", content: content }],
-      model: "deepseek-chat",
+      model: "deepseek/deepseek-chat",
     });
     const aiContent = completion.choices[0].message.content;
 

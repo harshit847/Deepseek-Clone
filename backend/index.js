@@ -10,7 +10,7 @@ import promtRoutes from "./routes/promt.route.js";
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 4001;
+const port = process.env.PORT || 5000;
 const MONGO_URL = process.env.MONGO_URI;
 
 // middleware

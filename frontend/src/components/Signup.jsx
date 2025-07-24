@@ -29,7 +29,7 @@ function Signup() {
     setError("");
     try {
       const { data } = await axios.post(
-        "http://localhost:4002/api/v1/user/signup",
+        "http://localhost:5000/api/v1/user/signup",
         {
           firstName: formData.firstName,
           lastName: formData.lastName,

@@ -5,7 +5,11 @@ console.log("🧪 API KEY CHECK:", process.env.OPENROUTER_API_KEY);
 
 const openai = new OpenAI({
   baseURL: "https://openrouter.ai/api/v1",
-  apiKey: "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",
+  apiKey: process.env.OPENROUTER_API_KEY,
+  defaultHeaders: {
+    "HTTP-Referer": "https://deepseek-clone-8kds.onrender.com/", 
+    "X-Title": "Deepseek Clone",
+  },
 });
 export const sendPromt = async (req, res) => {
   const { content } = req.body;

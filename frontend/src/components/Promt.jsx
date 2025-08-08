@@ -45,6 +45,7 @@ function Promt() {
 
     try {
       const token = localStorage.getItem("token");
+      console.log("🪙 Token in frontend:", token);
 
       const { data } = await axios.post(
         `${import.meta.env.VITE_API_URL}/deepseekai/promt`,

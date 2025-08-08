@@ -39,7 +39,7 @@ export const login = async (req, res) => {
     }
     // jwt code
     const token = jwt.sign({ id: user._id }, config.JWT_USER_PASSWORD, {
-      expiresIn: "1d",
+      expiresIn: "7d",
     });
 
 
